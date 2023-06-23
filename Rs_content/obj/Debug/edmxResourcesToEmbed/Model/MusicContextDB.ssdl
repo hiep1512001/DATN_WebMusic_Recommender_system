@@ -1,0 +1,203 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Web_musicModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="ALBUM">
+    <Key>
+      <PropertyRef Name="ID_ALBUM" />
+    </Key>
+    <Property Name="ID_ALBUM" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NAME_ALBUM" Type="nvarchar" MaxLength="50" />
+    <Property Name="ID_SINGER" Type="int" />
+    <Property Name="PICTURE_ALBUM" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="COMPOSER">
+    <Key>
+      <PropertyRef Name="ID_COMPOSER" />
+    </Key>
+    <Property Name="ID_COMPOSER" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NAME_COMPOSER" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="GENRES">
+    <Key>
+      <PropertyRef Name="ID_GENRE" />
+    </Key>
+    <Property Name="ID_GENRE" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NAME_GENRE" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="PLAYLIST">
+    <Key>
+      <PropertyRef Name="ID_PLAYLIST" />
+    </Key>
+    <Property Name="ID_PLAYLIST" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NAME_PLAYLIST" Type="nvarchar" MaxLength="200" />
+    <Property Name="ID_USER" Type="int" />
+  </EntityType>
+  <EntityType Name="RATING">
+    <Key>
+      <PropertyRef Name="ID_USER" />
+      <PropertyRef Name="ID_SONG" />
+    </Key>
+    <Property Name="ID_USER" Type="int" Nullable="false" />
+    <Property Name="ID_SONG" Type="int" Nullable="false" />
+    <Property Name="DATE_RATE" Type="date" />
+    <Property Name="RATING" Type="int" />
+    <Property Name="VIEWS" Type="int" />
+  </EntityType>
+  <EntityType Name="SINGER">
+    <Key>
+      <PropertyRef Name="ID_SINGER" />
+    </Key>
+    <Property Name="ID_SINGER" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NAME_SINGER" Type="nvarchar" MaxLength="50" />
+    <Property Name="PICTURE_SINGER" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="SONG">
+    <Key>
+      <PropertyRef Name="ID_SONG" />
+    </Key>
+    <Property Name="ID_SONG" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ID_SINGER" Type="int" />
+    <Property Name="ID_ALBUM" Type="int" />
+    <Property Name="ID_GENRE" Type="int" />
+    <Property Name="NAME_SONG" Type="nvarchar" MaxLength="50" />
+    <Property Name="PATH_SONG" Type="nvarchar(max)" />
+    <Property Name="PICTURE_SONG" Type="nvarchar(max)" />
+    <Property Name="ID_COMPOSER" Type="int" />
+  </EntityType>
+  <EntityType Name="SONGPLAYLIST">
+    <Key>
+      <PropertyRef Name="ID_PLAYLIST" />
+      <PropertyRef Name="ID_SONG" />
+    </Key>
+    <Property Name="ID_PLAYLIST" Type="int" Nullable="false" />
+    <Property Name="ID_SONG" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="USERS">
+    <Key>
+      <PropertyRef Name="ID_USER" />
+    </Key>
+    <Property Name="ID_USER" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NAME_USER" Type="nvarchar" MaxLength="50" />
+    <Property Name="PASSWORD" Type="varchar" MaxLength="50" />
+    <Property Name="EMAIL" Type="varchar" MaxLength="100" />
+    <Property Name="AVARTAR" Type="nvarchar(max)" />
+    <Property Name="decentralization" Type="int" />
+  </EntityType>
+  <Association Name="FK_ALBUMSINGER">
+    <End Role="SINGER" Type="Self.SINGER" Multiplicity="0..1" />
+    <End Role="ALBUM" Type="Self.ALBUM" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SINGER">
+        <PropertyRef Name="ID_SINGER" />
+      </Principal>
+      <Dependent Role="ALBUM">
+        <PropertyRef Name="ID_SINGER" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PLAYLISTUSER">
+    <End Role="USERS" Type="Self.USERS" Multiplicity="0..1" />
+    <End Role="PLAYLIST" Type="Self.PLAYLIST" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="USERS">
+        <PropertyRef Name="ID_USER" />
+      </Principal>
+      <Dependent Role="PLAYLIST">
+        <PropertyRef Name="ID_USER" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SONGALBUM">
+    <End Role="ALBUM" Type="Self.ALBUM" Multiplicity="0..1" />
+    <End Role="SONG" Type="Self.SONG" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ALBUM">
+        <PropertyRef Name="ID_ALBUM" />
+      </Principal>
+      <Dependent Role="SONG">
+        <PropertyRef Name="ID_ALBUM" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SONGCOMPOSER">
+    <End Role="COMPOSER" Type="Self.COMPOSER" Multiplicity="0..1" />
+    <End Role="SONG" Type="Self.SONG" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="COMPOSER">
+        <PropertyRef Name="ID_COMPOSER" />
+      </Principal>
+      <Dependent Role="SONG">
+        <PropertyRef Name="ID_COMPOSER" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SONGGENRE">
+    <End Role="GENRES" Type="Self.GENRES" Multiplicity="0..1" />
+    <End Role="SONG" Type="Self.SONG" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="GENRES">
+        <PropertyRef Name="ID_GENRE" />
+      </Principal>
+      <Dependent Role="SONG">
+        <PropertyRef Name="ID_GENRE" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SONGSINGER">
+    <End Role="SINGER" Type="Self.SINGER" Multiplicity="0..1" />
+    <End Role="SONG" Type="Self.SONG" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SINGER">
+        <PropertyRef Name="ID_SINGER" />
+      </Principal>
+      <Dependent Role="SONG">
+        <PropertyRef Name="ID_SINGER" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Web_musicModelStoreContainer">
+    <EntitySet Name="ALBUM" EntityType="Self.ALBUM" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="COMPOSER" EntityType="Self.COMPOSER" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="GENRES" EntityType="Self.GENRES" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PLAYLIST" EntityType="Self.PLAYLIST" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RATING" EntityType="Self.RATING" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SINGER" EntityType="Self.SINGER" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SONG" EntityType="Self.SONG" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SONGPLAYLIST" EntityType="Self.SONGPLAYLIST" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="USERS" EntityType="Self.USERS" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_ALBUMSINGER" Association="Self.FK_ALBUMSINGER">
+      <End Role="SINGER" EntitySet="SINGER" />
+      <End Role="ALBUM" EntitySet="ALBUM" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PLAYLISTUSER" Association="Self.FK_PLAYLISTUSER">
+      <End Role="USERS" EntitySet="USERS" />
+      <End Role="PLAYLIST" EntitySet="PLAYLIST" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SONGALBUM" Association="Self.FK_SONGALBUM">
+      <End Role="ALBUM" EntitySet="ALBUM" />
+      <End Role="SONG" EntitySet="SONG" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SONGCOMPOSER" Association="Self.FK_SONGCOMPOSER">
+      <End Role="COMPOSER" EntitySet="COMPOSER" />
+      <End Role="SONG" EntitySet="SONG" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SONGGENRE" Association="Self.FK_SONGGENRE">
+      <End Role="GENRES" EntitySet="GENRES" />
+      <End Role="SONG" EntitySet="SONG" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SONGSINGER" Association="Self.FK_SONGSINGER">
+      <End Role="SINGER" EntitySet="SINGER" />
+      <End Role="SONG" EntitySet="SONG" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
